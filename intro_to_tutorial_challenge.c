@@ -13,52 +13,63 @@ char* readline();
 char* ltrim(char*);
 char* rtrim(char*);
 char** split_string(char*);
-int parse_int( char*);
+void sort(int*,int);
+int parse_int(char*);
 
 /*
- * Complete the 'migratoryBirds' function below.
+ * Complete the 'introTutorial' function below.
  *
  * The function is expected to return an INTEGER.
- * The function accepts INTEGER_ARRAY arr as parameter.
+ * The function accepts following parameters:
+ *  1. INTEGER V
+ *  2. INTEGER_ARRAY arr
  */
 
-int migratoryBirds(int arr_count, int* arr) 
+int introTutorial(int V, int arr_count, int* arr)
 {
-    int count=0, temp_count=0, type;
-    
-    for(int i=5; i>=1; i--)
+    int i;
+    sort(arr,arr_count);
+    for(i=0;i<arr_count;i++)
+        if(arr[i]==V)
+            break;
+    return i;
+}
+
+void sort(int *arr, int arr_count)
+{
+    for(int round=1; round<arr_count; round++)
     {
-        for(int j=0; j<arr_count; j++)
-            if(arr[j] == i)
-                temp_count++;
-                
-        if(temp_count>=count)
+        for(int i=0; i<arr_count-round; i++)
         {
-            type =i;
-            count=temp_count;
+            if(arr[i] > arr[i+1])
+            {
+                arr[i] = arr[i] + arr[i+1];
+                arr[i+1] = arr[i] - arr[i+1];
+                arr[i] = arr[i] - arr[i+1]; 
+            }
         }
-        temp_count=0;
     }
-    return type;
 }
 
 int main()
 {
     FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
 
-    int arr_count = parse_int(ltrim(rtrim(readline())));
+    int V = parse_int(ltrim(rtrim(readline())));
+
+    int n = parse_int(ltrim(rtrim(readline())));
 
     char** arr_temp = split_string(rtrim(readline()));
 
-    int* arr = malloc(arr_count * sizeof(int));
+    int* arr = malloc(n * sizeof(int));
 
-    for (int i = 0; i < arr_count; i++) {
+    for (int i = 0; i < n; i++) {
         int arr_item = parse_int(*(arr_temp + i));
 
         *(arr + i) = arr_item;
     }
 
-    int result = migratoryBirds(arr_count, arr);
+    int result = introTutorial(V, n, arr);
 
     fprintf(fptr, "%d\n", result);
 
