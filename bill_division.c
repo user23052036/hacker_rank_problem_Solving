@@ -17,65 +17,51 @@ char** split_string(char*);
 int parse_int(char*);
 
 /*
- * Complete the 'lilysHomework' function below.
+ * Complete the 'bonAppetit' function below.
  *
- * The function is expected to return an INTEGER.
- * The function accepts INTEGER_ARRAY arr as parameter.
+ * The function accepts following parameters:
+ *  1. INTEGER_ARRAY bill
+ *  2. INTEGER k
+ *  3. INTEGER b
  */
-
-int lilysHomework(int arr_count, int* arr) 
+    //b:the amount of money that anna contributed to the bill
+    
+void bonAppetit(int bill_count, int* bill, int k, int b)
 {
-    int index,flag=0,even_odd,min,j,i=0,count=0;
-    if(arr_count%2 == 0)
-        even_odd= arr_count/2;
+    int sum=0;
+    for(int i=0; i<bill_count; i++)
+        sum = sum + bill[i];
+    
+    //int paid_money = sum/2;      //is b actual_pay or paid_money ????
+    int actual_pay = (sum-bill[k])/2;  
+
+    if(b == actual_pay)
+        printf("Bon Appetit");
     else
-        even_odd = (arr_count+1)/2;
-        
-    for(; i<=even_odd; i++)
-    {
-        min = arr[i];
-        for(j=i; j<=arr_count; j++)
-        {
-            if(arr[j] < min)
-            {
-                min = arr[j];
-                index=j;
-                flag=1;
-            }
-        }   
-        if(flag==1)
-        {
-            arr[index] = arr[index] + arr[i];
-            arr[i] =     arr[index] - arr[i];
-            arr[index] = arr[index] - arr[i];
-            count++;
-            flag=0;
-        }
-    }
-    return count;
+        printf("%d",b-actual_pay);
 }
 
 int main()
 {
-    FILE* fptr = fopen(getenv("OUTPUT_PATH"), "w");
+    char** first_multiple_input = split_string(rtrim(readline()));
 
-    int n = parse_int(ltrim(rtrim(readline())));
+    int n = parse_int(*(first_multiple_input + 0));
 
-    char** arr_temp = split_string(rtrim(readline()));
+    int k = parse_int(*(first_multiple_input + 1));
 
-    int* arr = malloc(n * sizeof(int));
+    char** bill_temp = split_string(rtrim(readline()));
+
+    int* bill = malloc(n * sizeof(int));
 
     for (int i = 0; i < n; i++) {
-        int arr_item = parse_int(*(arr_temp + i));
+        int bill_item = parse_int(*(bill_temp + i));
 
-        *(arr + i) = arr_item;
+        *(bill + i) = bill_item;
     }
 
-    int result = lilysHomework(n, arr);
+    int b = parse_int(ltrim(rtrim(readline())));
 
-    fprintf(fptr, "%d\n", result);
-
-    fclose(fptr);
+    bonAppetit(n, bill, k, b);
 
     return 0;
 }
